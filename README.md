@@ -33,7 +33,7 @@ Simulation results over 10000 episodes:
 
 
 <p align="center">
-  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
+  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">{:height="50%" width="50%"}
 </p>
 <p align="center">
 Figure 1 : Crash scenario
