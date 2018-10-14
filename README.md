@@ -30,11 +30,19 @@ Simulation results over 10000 episodes:
 3. The efficiency of the algorithm is evaluated, on average the ego car needs 1.8 steps to travel 1 meter.
 4. The comfort index is evaluated, on average the acceleration is 1.6 m/s^2.
 
-<p align="left">
+
+
+<p align="center">
   <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
 </p>
+<p align="center">
 Figure 1 : Crash scenario
-<p align="right">
+</p>
+
+
+<p align="center">
   <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Timeout.png">
 </p>
+<p align="center">
 Figure 2 : Timeout scenario
+</p>
