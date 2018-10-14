@@ -2,48 +2,100 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-def Pos_Predict_ConstV(pos, vel, dt, K):
+def predict_pos(pos, vel, dt, K):
+    """
+    Predicts future positions in K steps, assuming speed remains constant.
+    Args:
+      pos: current position of the car.
+      vel: current velocity of the car.
+      dt: time step.
+      K: Number of steps for prediction horizon
+
+    Returns:
+      The result of veh_pos_predict, where stores the future positions in K steps based on information of pos and vel.
+    """
     veh_pos_predict = []    # Initialize a list
-    for k in range(K):
-        veh_pos_predict.append(pos + vel*k*dt)  # Store the predicted position in K steps in the list
+    for step in range(K):
+        veh_pos_predict.append(pos + vel*step*dt)  # Store the predicted position in K steps in the list
     return veh_pos_predict
-def Acc_Select(acc, pos, vel, dt, K, da_list, priorVeh_pos):
-    inMargin = False
-    acc_predict = np.add(acc, da_list).tolist() # Add current acceleration with delta accelerations to get candidate accelerations
-    for acc in acc_predict:
+def predict_acc(acc, pos, vel, dt, K, da_list, priorVeh_pos):
+    """
+    Predicts future accelerations for ego car in K steps, considering the position of the prior car.
+    Args:
+      acc: current acceleration of the ego car.
+      pos: current position of the ego car.
+      vel: current velocity of the ego car.
+      dt: time step.
+      K: Number of steps for prediction horizon
+      da_list: A list of delta acceleration subjected to constraints
+      priorVeh_pos: The position of the prior car
+
+    Returns:
+      The result of acc_list, where stores the eligible accelerations in K steps.
+      The result of inMargin, a boolean indicates that if any of these accelerations will cause potential collision
+    """
+    inMargin = False    # Initialize inMargin as False
+    acc_list = np.add(acc, da_list).tolist() # Add current acceleration with delta accelerations to get candidate accelerations
+    for acc in acc_list:
 
         # Calculate predicted position with respect to each candidate acceleration in K steps
         vel = vel + acc*dt
-        egoCar_pos_Predict = Pos_Predict_ConstV(pos, vel, dt, K)
+        egoCar_pos_Predict = predict_pos(pos, vel, dt, K)
 
         # Check from the last position to the first in the list, if a position is found that it's in the margin region,
         # then remove the candidate acceleration as it will cause potential collisions
-        for k in range(K-1, -1, -1):
-            if egoCar_pos_Predict[k] > -margin and 0 > priorVeh_pos[k]:
-                acc_predict = [acc_predict for acc_predict in acc_predict if acc_predict < acc]
+        for step in range(K-1, -1, -1):
+            if egoCar_pos_Predict[step] > -margin and 0 > priorVeh_pos[step]:
+                acc_list = [acc_list for acc_list in acc_list if acc_list < acc]
                 break
-
-    # This happens when all candidates will cause collision, then mark inMargin as True
-    # This might be due to the initial state that are too close to the intersection or too fast
-    if len(acc_predict) == 0:
+    if len(acc_list) == 0:
         inMargin = True
-    return acc_predict, inMargin
-def Cost_List(acc_predict, K, vel_target, vel, Cv, Ca):
-    cost_predict = []   # Initialize a cost candidate list
-    for acc in acc_predict:
-        cost = []
-        for k in range(K):
-            # Calculate the total cost for each candidate acceleration in K steps
-            # A quadratic cost function is selected
-            # Formula for the cost function : Cv(vel_target - vel_next)^2 + Ca(acc^2)
-            # where the first term is the efficiency cost (gap between the current speed and the target speed)
-            # and the second term penalizes the control signal, Cv and Ca are factors for tuning
-            vel_next = vel + acc*k*dt
-            cost.append(Cv*(vel_target - vel_next)**2 + Ca*acc**2)
-        cost_predict.append(sum(cost))
-    return cost_predict
-def egoCar_Update(acc, vel, pos, dt, max_a, min_a, max_v, min_v):
+    return acc_list, inMargin
+def calculate_costlist(acc_list, K, vel_target, vel, Cv, Ca):
+    """
+    Calculates a list of cost with a given acceleration list.
+    Args:
+      acc_list: A list of accelerations calculated in predict_acc function.
+      K: Number of steps for prediction horizon.
+      vel_target: The desired velocity of ego car, here is set as maximum velocity.
+      vel: current velocity of the ego car.
+      Cv: Factor for velocity term in cost function
+      Ca: Factor for penalizing acceleration term in cost function
 
+    Returns:
+      The result of costlist, where stores calculated costs according acceleration list
+    """
+    costlist = []   # Initialize a cost candidate list
+    for acc in acc_list:
+        cost = []
+        for step in range(K):
+            """
+            Calculate the total cost for each candidate acceleration in K steps
+            A quadratic cost function is selected
+            Formula for the cost function : Cv(vel_target - vel_next)^2 + Ca(acc^2)
+            where the first term is the efficiency cost (gap between the next speed and the target speed)
+            and the second term penalizes the control signal
+            """
+            vel_next = vel + acc*step*dt
+            cost.append(Cv*(vel_target - vel_next)**2 + Ca*acc**2)
+        costlist.append(sum(cost))
+    return costlist
+def update_egocar(acc, vel, pos, dt, max_a, min_a, max_v, min_v):
+    """
+    Updates the states of the ego car.
+    Args:
+      acc: current acceleration of the ego car.
+      pos: current position of the ego car.
+      vel: current velocity of the ego car.
+      dt: time step.
+      max_a: Maximum acceleration constraint
+      min_a: Minimum acceleration constraint
+      max_v: Maximun velocity constraint
+      min_v: Minimum velocity constraint
+
+    Returns:
+      The result of updated pos, vel, acc of the ego car
+    """
     # Update pos, vel and acc subjected to max_a, min_a, max_v and min_v
     if acc > max_a:
         acc = max_a
@@ -58,8 +110,17 @@ def egoCar_Update(acc, vel, pos, dt, max_a, min_a, max_v, min_v):
         vel = min_v
         acc = 0
     return pos, vel, acc
-def priorCar_Update(pos, vel, dt):
+def update_priorcar(pos, vel, dt):
+    """
+    Updates the states of the prior car.
+    Args:
+      pos: current position of the prior car.
+      vel: current velocity of the prior car.
+      dt: time step.
 
+    Returns:
+      The result of updated pos, vel, acc of the prior car
+    """
     # Update the prior car, assuming constant speed
     pos += vel * dt
     return pos,vel
@@ -125,8 +186,6 @@ timeout_step = 150 # Timeout threshold
 Goal = 30.0   # Goal for the ego car
 toGoal_dis = 0.0 # Initialize the distance from start point to goal
 
-
-
 for simTime in range(episode):
     # Setup the plot
     fig, ax1, ax2, ax3, ax4 = setPlot(lane_length, margin, max_v, min_v, max_a, min_a)
@@ -150,26 +209,26 @@ for simTime in range(episode):
         priorCar_vel += priorCar_acc*dt # Update priorCar_vel
         if priorCar_vel < 0:
             priorCar_vel = 0    # Prior car cannot go backwards, otherwise it will end up in endless loop
-        priorCar_pos_predict = Pos_Predict_ConstV(priorCar_pos, priorCar_vel, dt, K)    # Predict the priorCar_pos in K steps
+        priorCar_pos_predict = predict_pos(priorCar_pos, priorCar_vel, dt, K)    # Predict the priorCar_pos in K steps
 
         # Select candidate accelerations in K steps, subjected to the constraints
-        egoCar_acc_predict, inMargin= Acc_Select(egoCar_acc, egoCar_pos, egoCar_vel, dt, K, da_list, priorCar_pos_predict)
+        egoCar_acclist, inMargin= predict_acc(egoCar_acc, egoCar_pos, egoCar_vel, dt, K, da_list, priorCar_pos_predict)
 
         if inMargin:
             # If all candidate accelerations will cause ego car go into/beyond margin zone, take the min delta acceleratoin
             acc -= 0.2
         else:
-            # Otherwise calculate the costs according to candidate accelerations
-            cost_predict = Cost_List(egoCar_acc_predict, K, vel_target, egoCar_vel, Cv, Ca)
+            # Otherwise calculate the costs according to acceleration list
+            costlist = calculate_costlist(egoCar_acclist, K, vel_target, egoCar_vel, Cv, Ca)
             # Afterwards choose the acceleration with the min cost
-            acc = egoCar_acc_predict[np.argmin(cost_predict)]
+            acc = egoCar_acclist[np.argmin(costlist)]
         acc_accum += abs(acc)    # Accumulate acceleration
 
         # Update egoCar_pos, egoCar_vel and egoCar_acc according to the chosen acceleration, subjecting to max_a, min_a, max_v and min_v
-        egoCar_pos, egoCar_vel, egoCar_acc = egoCar_Update(acc, egoCar_vel, egoCar_pos, dt, max_a, min_a, max_v, min_v)
+        egoCar_pos, egoCar_vel, egoCar_acc = update_egocar(acc, egoCar_vel, egoCar_pos, dt, max_a, min_a, max_v, min_v)
 
         # Update priorCar_pos and priorCar_vel
-        priorCar_pos, priorCar_vel = priorCar_Update(priorCar_pos, priorCar_vel, dt)
+        priorCar_pos, priorCar_vel = update_priorcar(priorCar_pos, priorCar_vel, dt)
         # If ego car enters the obstacle region, mark as a crash case
         if egoCar_pos > 0 > priorCar_pos:
             crash += 1
@@ -191,4 +250,3 @@ for simTime in range(episode):
     plt.close()
 print("Crashed " + str(crash) +" times in " + str(episode) + " episodes.")
 print("Timeouted " + str(timeout) +" times in " + str(episode) + " episodes.")
-    # plt.show()
