@@ -33,7 +33,7 @@ Simulation results over 10000 episodes:
 
 
 <p align="center">
-  <img height="50%" width="50%" src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
+  <img height="70%" width="70%" src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
 </p>
 <p align="center">
 Figure 1 : Crash scenario
@@ -41,7 +41,7 @@ Figure 1 : Crash scenario
 
 
 <p align="center">
-  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Timeout.png">
+  <img height="70%" width="70%" src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Timeout.png">
 </p>
 <p align="center">
 Figure 2 : Timeout scenario
