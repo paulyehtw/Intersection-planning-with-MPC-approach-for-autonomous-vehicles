@@ -1,6 +1,6 @@
 # Intersection-planning-with-MPC-approach-for-autonomous-vehicles
 <p align="center">
-![alt text](https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Simulation_GIF.gif)
+  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Simulation_GIF.gif">
 </p>
 
 The intersection planning problem can be divided into two parts : priority assignment problem and  vehicle control problem. This project assumes that it the priority is governed by the European right hand driving traffic rules, which means vehicles must defer to vehicles arriving on the road to its right. So here only the vehicle control problem is tackled and the Model Predictive Control approach is implemented.
