@@ -18,7 +18,7 @@ Constraints subjected to the MPC cost function :
 Simulation settings : 
 1. Time step is 0.1 second
 2. Prediction horizon for the MPC is 50 steps (5 seconds)
-3 Timeout threshold is 150 steps if the ego car does not reach goal.
+3. Timeout threshold is 150 steps if the ego car does not reach goal.
 
 Simulation results over 10000 episodes:
 1. The ego car doesnt yield to the prior car 2531 times in 10000 episodes(25%),  it is because the initial position is too close to the intersection or initial velocity is too fast, the controller cannot stop the car if constraints are obeyed.
