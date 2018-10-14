@@ -25,7 +25,14 @@ Simulation settings :
 3. Timeout threshold is 150 steps if the ego car does not reach goal.
 
 Simulation results over 10000 episodes:
-1. The ego car doesnt yield to the prior car 2531 times in 10000 episodes(25%),  it is because the initial position is too close to the intersection or initial velocity is too fast, the controller cannot stop the car if constraints are obeyed.
-2. The ego car timeouted 103 times in 10000 episodes(1%) because the prior car is too slow and ego needs to wait for it to pass.
+1. The ego car doesnt yield to the prior car 2531 times in 10000 episodes(25%),  it is because the initial position is too close to the intersection or initial velocity is too fast, the controller cannot stop the car if constraints are obeyed(See figure 1 below).
+2. The ego car timeouted 103 times in 10000 episodes(1%) because the prior car is too slow and ego needs to wait for it to pass(See figure 2 below).
 3. The efficiency of the algorithm is evaluated, on average the ego car needs 1.8 steps to travel 1 meter.
 4. The comfort index is evaluated, on average the acceleration is 1.6 m/s^2.
+
+<p align="left">
+  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
+</p>
+<p align="right">
+  <img src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Timeout.png">
+</p>
