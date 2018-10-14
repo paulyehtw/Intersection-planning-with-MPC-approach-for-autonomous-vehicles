@@ -5,11 +5,14 @@
 
 The intersection planning problem can be divided into two parts : priority assignment problem and  vehicle control problem. This project assumes that it the priority is governed by the European right hand driving traffic rules, which means vehicles must defer to vehicles arriving on the road to its right. So here only the vehicle control problem is tackled and the Model Predictive Control approach is implemented.
 
+
 Intersection scenario setting : 
 1. An ego will show up at the left lane of the intersection at random position and with random velocity between 5 m/s and 20 m/s. 
 2. A prior car (the car arriving from the right) will show up also at the right lane to ego car at random position and with random velocity.
 3. The prior car will no yield to the ego car.
 4. All vehicles will go straight to cross the intersection, no turns will be made.
+
+
 Constraints subjected to the MPC cost function : 
 1. The ego car must drive with velocity in range of [0, 20] m/s.
 2. The ego car must drive with acceleration in range of [-2, 2] m/s^2.
