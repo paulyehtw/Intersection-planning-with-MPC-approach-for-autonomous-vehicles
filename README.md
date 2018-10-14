@@ -11,6 +11,8 @@ Intersection scenario setting :
 2. A prior car (the car arriving from the right) will show up also at the right lane to ego car at random position and with random velocity.
 3. The prior car will no yield to the ego car.
 4. All vehicles will go straight to cross the intersection, no turns will be made.
+5. Measurements from prior car is accurate without noise
+6. Communication between planner and ego car is ideal and without delay, whic means the speed command at timestamp t can be reached at timestamp t+1
 
 
 Constraints subjected to the MPC cost function : 
