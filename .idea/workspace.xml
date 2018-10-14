@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8af50c14-8d79-490d-b761-a7e559489a3f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MPC_planner.py" afterPath="$PROJECT_DIR$/MPC_planner.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,16 +16,11 @@
       <file leaf-file-name="MPC_planner.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MPC_planner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1110">
-              <caret line="236" column="17" lean-forward="true" selection-start-line="236" selection-start-column="17" selection-end-line="236" selection-end-column="17" />
+            <state relative-caret-position="2895">
+              <caret line="242" column="79" lean-forward="false" selection-start-line="242" selection-start-column="79" selection-end-line="242" selection-end-column="79" />
               <folding>
                 <element signature="e#104#688#0" expanded="false" />
                 <element signature="e#755#2311#0" expanded="false" />
-                <element signature="e#2378#3639#0" expanded="false" />
-                <element signature="e#3710#4504#0" expanded="false" />
-                <element signature="e#4544#4883#0" expanded="false" />
-                <element signature="e#4950#6142#0" expanded="false" />
-                <element signature="e#6259#6967#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -46,6 +40,7 @@
       <find>egoCar_Update</find>
       <find>priorCar_Update</find>
       <find>egoCar_acc_list</find>
+      <find>priorCar</find>
     </findStrings>
     <replaceStrings>
       <replace>for step</replace>
@@ -59,6 +54,7 @@
       <replace>update_egocar</replace>
       <replace>update_priorcar</replace>
       <replace>egoCar_acclist</replace>
+      <replace>egocar</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -225,11 +221,6 @@
           <folding>
             <element signature="e#104#688#0" expanded="false" />
             <element signature="e#755#2311#0" expanded="false" />
-            <element signature="e#2378#3639#0" expanded="false" />
-            <element signature="e#3710#4504#0" expanded="false" />
-            <element signature="e#4544#4883#0" expanded="false" />
-            <element signature="e#4950#6142#0" expanded="false" />
-            <element signature="e#6259#6967#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -241,11 +232,6 @@
           <folding>
             <element signature="e#104#688#0" expanded="false" />
             <element signature="e#755#2311#0" expanded="false" />
-            <element signature="e#2378#3639#0" expanded="false" />
-            <element signature="e#3710#4504#0" expanded="false" />
-            <element signature="e#4544#4883#0" expanded="false" />
-            <element signature="e#4950#6142#0" expanded="false" />
-            <element signature="e#6259#6967#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -259,16 +245,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MPC_planner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="236" column="17" lean-forward="true" selection-start-line="236" selection-start-column="17" selection-end-line="236" selection-end-column="17" />
+        <state relative-caret-position="2895">
+          <caret line="242" column="79" lean-forward="false" selection-start-line="242" selection-start-column="79" selection-end-line="242" selection-end-column="79" />
           <folding>
             <element signature="e#104#688#0" expanded="false" />
             <element signature="e#755#2311#0" expanded="false" />
-            <element signature="e#2378#3639#0" expanded="false" />
-            <element signature="e#3710#4504#0" expanded="false" />
-            <element signature="e#4544#4883#0" expanded="false" />
-            <element signature="e#4950#6142#0" expanded="false" />
-            <element signature="e#6259#6967#0" expanded="false" />
           </folding>
         </state>
       </provider>

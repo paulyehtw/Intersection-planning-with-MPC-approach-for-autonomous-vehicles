@@ -40,12 +40,12 @@ def predict_acc(acc, pos, vel, dt, K, da_list, priorVeh_pos):
 
         # Calculate predicted position with respect to each candidate acceleration in K steps
         vel = vel + acc*dt
-        egoCar_pos_Predict = predict_pos(pos, vel, dt, K)
+        egocar_pos_Predict = predict_pos(pos, vel, dt, K)
 
         # Check from the last position to the first in the list, if a position is found that it's in the margin region,
         # then remove the candidate acceleration as it will cause potential collisions
         for step in range(K-1, -1, -1):
-            if egoCar_pos_Predict[step] > -margin and 0 > priorVeh_pos[step]:
+            if egocar_pos_Predict[step] > -margin and 0 > priorVeh_pos[step]:
                 acc_list = [acc_list for acc_list in acc_list if acc_list < acc]
                 break
     if len(acc_list) == 0:
@@ -149,23 +149,23 @@ def setPlot(lane_length, margin, max_v, min_v, max_a, min_a):
     ax3.set_ylabel("Acceleration (m/s^2)")
     ax3.set_xlabel("Simulation step")
     return fig, ax1, ax2, ax3, ax4
-def Plot(ax1, ax2, ax3, ax4, egoCar_pos, priorCar_pos,egoCar_vel, priorCar_vel, egoCar_acc, step, lane_length):
-    ax1.scatter(egoCar_pos, priorCar_pos, s=1)
-    ax2.scatter(step, egoCar_vel, s=1, c='b', label='Ego Car speed')
-    ax2.scatter(step, priorCar_vel, s=1, c='r', label='Prior Car speed')
+def Plot(ax1, ax2, ax3, ax4, egocar_pos, priorcar_pos,egocar_vel, priorcar_vel, egocar_acc, step, lane_length):
+    ax1.scatter(egocar_pos, priorcar_pos, s=1)
+    ax2.scatter(step, egocar_vel, s=1, c='b', label='Ego Car speed')
+    ax2.scatter(step, priorcar_vel, s=1, c='r', label='Prior Car speed')
     if step == 1:
         ax2.legend(loc="upper right")
-    ax3.scatter(step, egoCar_acc, s=1, c='b')
+    ax3.scatter(step, egocar_acc, s=1, c='b')
     ax4.cla()
     ax4.set_title('Birds-eye view of the intersection')
     ax4.set_xlim((-lane_length, lane_length))
     ax4.set_ylim((-lane_length, lane_length))
     ax4.set_ylabel("Y(m)")
     ax4.set_xlabel("X(m)")
-    ax4.scatter(egoCar_pos, 0)
-    ax4.text(egoCar_pos, 0.5, "Ego Car")
-    ax4.scatter(0, priorCar_pos)
-    ax4.text(0.5, priorCar_pos, "Prior Car")
+    ax4.scatter(egocar_pos, 0)
+    ax4.text(egocar_pos, 0.5, "Ego Car")
+    ax4.scatter(0, priorcar_pos)
+    ax4.text(0.5, priorcar_pos, "Prior Car")
 
     plt.subplots_adjust(hspace=0.35)
     plt.pause(dt)
@@ -191,46 +191,46 @@ for simTime in range(episode):
     fig, ax1, ax2, ax3, ax4 = setPlot(lane_length, margin, max_v, min_v, max_a, min_a)
 
     # Initialize positions, velocities and accelerations for the ego car and the prior car
-    egoCar_pos, priorCar_pos = random.randrange(-lane_length,-margin), random.randrange(-lane_length,0)
-    egoCar_vel, priorCar_vel = random.randrange(5,15), random.randrange(5,20)
-    egoCar_acc, priorCar_acc = 0.0, 0.0
-    toGoal_dis = Goal - egoCar_pos  # Distance from start point to goal
+    egocar_pos, priorcar_pos = random.randrange(-lane_length,-margin), random.randrange(-lane_length,0)
+    egocar_vel, priorcar_vel = random.randrange(5,15), random.randrange(5,20)
+    egocar_acc, priorcar_acc = 0.0, 0.0
+    toGoal_dis = Goal - egocar_pos  # Distance from start point to goal
     acc_accum = 0.0  # Initialize accumulated acceleration
 
 
-    # Initialize first acceleration with initial egoCar_acc, initialize step
-    acc = egoCar_acc
+    # Initialize first acceleration with initial egocar_acc, initialize step
+    acc = egocar_acc
     step = 0
 
-    while egoCar_pos < Goal and step < timeout_step:
+    while egocar_pos < Goal and step < timeout_step:
 
         # Predict the state of the prior car in K steps
-        priorCar_acc += random.uniform(-0.2, 0.2)   # Add some noise to the priorCar_acc
-        priorCar_vel += priorCar_acc*dt # Update priorCar_vel
-        if priorCar_vel < 0:
-            priorCar_vel = 0    # Prior car cannot go backwards, otherwise it will end up in endless loop
-        priorCar_pos_predict = predict_pos(priorCar_pos, priorCar_vel, dt, K)    # Predict the priorCar_pos in K steps
+        priorcar_acc += random.uniform(-0.2, 0.2)   # Add some noise to the priorcar_acc
+        priorcar_vel += priorcar_acc*dt # Update priorcar_vel
+        if priorcar_vel < 0:
+            priorcar_vel = 0    # Prior car cannot go backwards, otherwise it will end up in endless loop
+        priorcar_pos_predict = predict_pos(priorcar_pos, priorcar_vel, dt, K)    # Predict the priorcar_pos in K steps
 
         # Select candidate accelerations in K steps, subjected to the constraints
-        egoCar_acclist, inMargin= predict_acc(egoCar_acc, egoCar_pos, egoCar_vel, dt, K, da_list, priorCar_pos_predict)
+        egocar_acclist, inMargin= predict_acc(egocar_acc, egocar_pos, egocar_vel, dt, K, da_list, priorcar_pos_predict)
 
         if inMargin:
             # If all candidate accelerations will cause ego car go into/beyond margin zone, take the min delta acceleratoin
             acc -= 0.2
         else:
             # Otherwise calculate the costs according to acceleration list
-            costlist = calculate_costlist(egoCar_acclist, K, vel_target, egoCar_vel, Cv, Ca)
+            costlist = calculate_costlist(egocar_acclist, K, vel_target, egocar_vel, Cv, Ca)
             # Afterwards choose the acceleration with the min cost
-            acc = egoCar_acclist[np.argmin(costlist)]
+            acc = egocar_acclist[np.argmin(costlist)]
         acc_accum += abs(acc)    # Accumulate acceleration
 
-        # Update egoCar_pos, egoCar_vel and egoCar_acc according to the chosen acceleration, subjecting to max_a, min_a, max_v and min_v
-        egoCar_pos, egoCar_vel, egoCar_acc = update_egocar(acc, egoCar_vel, egoCar_pos, dt, max_a, min_a, max_v, min_v)
+        # Update egocar_pos, egocar_vel and egocar_acc according to the chosen acceleration, subjecting to max_a, min_a, max_v and min_v
+        egocar_pos, egocar_vel, egocar_acc = update_egocar(acc, egocar_vel, egocar_pos, dt, max_a, min_a, max_v, min_v)
 
-        # Update priorCar_pos and priorCar_vel
-        priorCar_pos, priorCar_vel = update_priorcar(priorCar_pos, priorCar_vel, dt)
+        # Update priorcar_pos and priorcar_vel
+        priorcar_pos, priorcar_vel = update_priorcar(priorcar_pos, priorcar_vel, dt)
         # If ego car enters the obstacle region, mark as a crash case
-        if egoCar_pos > 0 > priorCar_pos:
+        if egocar_pos > 0 > priorcar_pos:
             crash += 1
             break
 
@@ -240,7 +240,7 @@ for simTime in range(episode):
             timeout += 1
 
         # Plot the results
-        Plot(ax1, ax2, ax3, ax4, egoCar_pos, priorCar_pos, egoCar_vel, priorCar_vel, egoCar_acc, step, lane_length)
+        Plot(ax1, ax2, ax3, ax4, egocar_pos, priorcar_pos, egocar_vel, priorcar_vel, egocar_acc, step, lane_length)
     evaluate_efficiency = toGoal_dis / step # Evaluate the efficiency in meter/step
     evaluate_comfort = acc_accum / step # Evaluate the comfort with average acceleration
     print("\nEpisode : " + str(simTime + 1))
