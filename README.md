@@ -41,7 +41,7 @@ The intersection planning problem can be divided into two parts : priority assig
   <img height="70%" width="70%" src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Crash.png">
 </p>
 <p align="center">
-Figure 1 : Crash scenario
+<b>Figure 1 : Crash scenario</b>
 </p>
 
 
@@ -49,5 +49,5 @@ Figure 1 : Crash scenario
   <img height="70%" width="70%" src="https://github.com/paulyehtw/Intersection-planning-with-MPC-approach-for-autonomous-vehicles/blob/master/Timeout.png">
 </p>
 <p align="center">
-Figure 2 : Timeout scenario
+<b>Figure 2 : Timeout scenario</b>
 </p>
